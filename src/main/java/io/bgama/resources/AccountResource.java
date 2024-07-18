@@ -36,13 +36,13 @@ public class AccountResource {
             return Response.status(Response.Status.CREATED).entity(accountResponse).build();
         } catch (PersistenceException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.TRANSACTION_FAILED.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.TRANSACTION_FAILED.getMessage()).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 
@@ -59,10 +59,10 @@ public class AccountResource {
             return Response.ok(accountResponse).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 
@@ -80,10 +80,10 @@ public class AccountResource {
             return Response.ok(accountResponse).entity("Account with id " + accountId + " has been updated.").build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_ACCOUNT_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_ACCOUNT_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 
@@ -100,10 +100,10 @@ public class AccountResource {
             return Response.status(Response.Status.OK).entity("Account has been deleted").build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 }

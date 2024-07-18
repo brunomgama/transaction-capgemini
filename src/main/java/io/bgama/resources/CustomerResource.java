@@ -36,10 +36,10 @@ public class CustomerResource {
             return Response.status(Response.Status.CREATED).entity(customerResponse).build();
         } catch (PersistenceException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.TRANSACTION_FAILED.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.TRANSACTION_FAILED.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 
@@ -56,10 +56,10 @@ public class CustomerResource {
             return Response.ok(customerResponse).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 
@@ -77,10 +77,10 @@ public class CustomerResource {
             return Response.ok(customerResponse).entity("Customer with id " + customerId + " has been updated.").build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 
@@ -97,10 +97,10 @@ public class CustomerResource {
             return Response.status(Response.Status.OK).entity("Customer has been deleted").build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
         }
     }
 }
