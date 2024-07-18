@@ -7,6 +7,7 @@ import io.bgama.dto.customer.CustomerResponse;
 import io.bgama.entity.Customer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class CustomerService implements CustomerServiceAccess {
@@ -15,8 +16,14 @@ public class CustomerService implements CustomerServiceAccess {
     CustomerDataLayer customerDataLayer;
 
     @Override
+    @Transactional
     public CustomerResponse createCustomer(CustomerRequest customerRequest) {
-        return null;
+        Customer customer = new Customer();
+        customer.name = customerRequest.getName();
+        customer.surname = customerRequest.getSurname();
+        customerDataLayer.persist(customer);
+
+        return new CustomerResponse(customer.id, customer.name, customer.surname);
     }
 
     @Override
@@ -26,5 +33,30 @@ public class CustomerService implements CustomerServiceAccess {
             return null;
         }
         return new CustomerResponse(customer.id, customer.name, customer.surname);
+    }
+
+    @Override
+    @Transactional
+    public CustomerResponse updateCustomerDetails(Long customerId, CustomerRequest customerRequest) {
+        Customer customer = customerDataLayer.findById(customerId);
+        if (customer == null) {
+            return null;
+        }
+        customer.name = customerRequest.getName();
+        customer.surname = customerRequest.getSurname();
+        customerDataLayer.persist(customer);
+
+        return new CustomerResponse(customer.id, customer.name, customer.surname);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteCustomer(Long customerId) {
+        Customer customer = customerDataLayer.findById(customerId);
+        if (customer == null) {
+            return false;
+        }
+        customerDataLayer.delete(customer);
+        return true;
     }
 }
