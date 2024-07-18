@@ -10,6 +10,12 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+/**
+ * Resource class for handling account-related REST endpoints.
+ * This class provides endpoints for creating, retrieving, updating, and deleting accounts.
+ * It interacts with AccountServiceAccess for business logic operations.
+ * @author brunogama
+ */
 @Path("/account")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -18,6 +24,11 @@ public class AccountResource {
     @Inject
     AccountServiceAccess accountService;
 
+    /**
+     * Endpoint for creating a new account.
+     * @param accountRequest The request body containing account details.
+     * @return               HTTP response with the created account details.
+     */
     @POST
     public Response createAccount(AccountRequest accountRequest) {
         try {
@@ -25,16 +36,21 @@ public class AccountResource {
             return Response.status(Response.Status.CREATED).entity(accountResponse).build();
         } catch (PersistenceException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.TRANSACTION_FAILED + e.getMessage()).build();
+                    .entity(ErrorMessage.TRANSACTION_FAILED.getMessage() + e.getMessage()).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage() + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
         }
     }
 
+    /**
+     * Endpoint for retrieving account details by account ID.
+     * @param accountId The ID of the account to retrieve.
+     * @return          HTTP response with the account details.
+     */
     @GET
     @Path("/{accountId}")
     public Response getAccountDetails(@PathParam("accountId") Long accountId) {
@@ -43,13 +59,19 @@ public class AccountResource {
             return Response.ok(accountResponse).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND + e.getMessage()).build();
+                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage() + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
         }
     }
 
+    /**
+     * Endpoint for updating account details by account ID.
+     * @param accountId      The ID of the account to update.
+     * @param accountRequest The request body containing updated account details.
+     * @return               HTTP response with the updated account details.
+     */
     @PUT
     @Path("/{accountId}")
     public Response updateAccountDetails(@PathParam("accountId") Long accountId, AccountRequest accountRequest) {
@@ -58,13 +80,18 @@ public class AccountResource {
             return Response.ok(accountResponse).entity("Account with id " + accountId + " has been updated.").build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.CUSTOMER_ACCOUNT_NOT_FOUND + e.getMessage()).build();
+                    .entity(ErrorMessage.CUSTOMER_ACCOUNT_NOT_FOUND.getMessage() + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
         }
     }
 
+    /**
+     * Endpoint for deleting an account by account ID.
+     * @param accountId The ID of the account to delete.
+     * @return          HTTP response indicating success or failure of the deletion.
+     */
     @DELETE
     @Path("/{accountId}")
     public Response deleteAccount(@PathParam("accountId") Long accountId) {
@@ -73,10 +100,10 @@ public class AccountResource {
             return Response.status(Response.Status.OK).entity("Account has been deleted").build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND + e.getMessage()).build();
+                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage() + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage() + e.getMessage()).build();
         }
     }
 }

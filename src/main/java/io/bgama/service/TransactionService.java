@@ -24,10 +24,7 @@ public class TransactionService implements TransactionServiceAccess {
     @Override
     @Transactional
     public TransactionResponse createTransaction(TransactionRequest transactionRequest) throws NotFoundException {
-        Account account = accountDataLayer.findById(transactionRequest.getAccountId());
-        if (account == null) {
-            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
-        }
+        checkAccount(transactionRequest);
 
         Transaction transaction = new Transaction();
         transaction.setAccountId(transactionRequest.getAccountId());
@@ -40,10 +37,7 @@ public class TransactionService implements TransactionServiceAccess {
 
     @Override
     public TransactionResponse getTransactionDetails(Long transactionId) throws NotFoundException {
-        Transaction transaction = transactionDataLayer.findById(transactionId);
-        if (transaction == null) {
-            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
-        }
+        Transaction transaction = checkTransaction(transactionId);
 
         return new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount());
     }
@@ -51,15 +45,9 @@ public class TransactionService implements TransactionServiceAccess {
     @Override
     @Transactional
     public TransactionResponse updateTransactionDetails(Long transactionId, TransactionRequest transactionRequest) throws NotFoundException {
-        Transaction transaction = transactionDataLayer.findById(transactionId);
-        if (transaction == null) {
-            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
-        }
+        Transaction transaction = checkTransaction(transactionId);
 
-        Account account = accountDataLayer.findById(transactionRequest.getAccountId());
-        if (account == null) {
-            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
-        }
+        checkAccount(transactionRequest);
 
         transaction.setAccountId(transactionRequest.getAccountId());
         transaction.setDebit(transactionRequest.getIsDebit());
@@ -72,10 +60,22 @@ public class TransactionService implements TransactionServiceAccess {
     @Override
     @Transactional
     public void deleteTransaction(Long transactionId) throws NotFoundException {
+        Transaction transaction = checkTransaction(transactionId);
+        transactionDataLayer.delete(transaction);
+    }
+
+    private Transaction checkTransaction(Long transactionId) {
         Transaction transaction = transactionDataLayer.findById(transactionId);
         if (transaction == null) {
             throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
         }
-        transactionDataLayer.delete(transaction);
+        return transaction;
+    }
+
+    private void checkAccount(TransactionRequest transactionRequest) {
+        Account account = accountDataLayer.findById(transactionRequest.getAccountId());
+        if (account == null) {
+            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
+        }
     }
 }
