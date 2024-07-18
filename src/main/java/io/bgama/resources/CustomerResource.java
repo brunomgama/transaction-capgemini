@@ -3,16 +3,10 @@ package io.bgama.resources;
 import io.bgama.dto.customer.CustomerRequest;
 import io.bgama.dto.customer.CustomerResponse;
 import io.bgama.api.service.CustomerServiceAccess;
+import io.bgama.error.ErrorMessage;
 import jakarta.inject.Inject;
 import jakarta.persistence.PersistenceException;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -31,10 +25,10 @@ public class CustomerResource {
             return Response.status(Response.Status.CREATED).entity(customerResponse).build();
         } catch (PersistenceException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Transaction failed: " + e.getMessage()).build();
+                    .entity(ErrorMessage.TRANSACTION_FAILED + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An unexpected error occurred: " + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
         }
     }
 
@@ -43,13 +37,13 @@ public class CustomerResource {
     public Response getCustomerDetails(@PathParam("customerId") Long customerId) {
         try {
             CustomerResponse customerResponse = customerService.getCustomerDetails(customerId);
-            if (customerResponse == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("Customer not found").build();
-            }
             return Response.ok(customerResponse).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An unexpected error occurred: " + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
         }
     }
 
@@ -58,13 +52,13 @@ public class CustomerResource {
     public Response updateCustomerDetails(@PathParam("customerId") Long customerId, CustomerRequest customerRequest) {
         try {
             CustomerResponse customerResponse = customerService.updateCustomerDetails(customerId, customerRequest);
-            if (customerResponse == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("Customer not found").build();
-            }
             return Response.ok(customerResponse).entity("Customer with id " + customerId + " has been updated.").build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An unexpected error occurred: " + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
         }
     }
 
@@ -72,12 +66,14 @@ public class CustomerResource {
     @Path("/{customerId}")
     public Response deleteCustomer(@PathParam("customerId") Long customerId) {
         try {
-            boolean isDeleted = customerService.deleteCustomer(customerId);
-            return isDeleted ? Response.status(Response.Status.OK).entity("Customer has been deleted").build()
-                    : Response.status(Response.Status.NOT_FOUND).entity("Customer not found").build();
+            customerService.deleteCustomer(customerId);
+            return Response.status(Response.Status.OK).entity("Customer has been deleted").build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.CUSTOMER_NOT_FOUND + e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An unexpected error occurred: " + e.getMessage()).build();
+                    .entity(ErrorMessage.UNEXPECTED_ERROR + e.getMessage()).build();
         }
     }
 }

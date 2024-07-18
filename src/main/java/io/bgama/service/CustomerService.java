@@ -8,6 +8,8 @@ import io.bgama.entity.Customer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
 
 @ApplicationScoped
 public class CustomerService implements CustomerServiceAccess {
@@ -19,44 +21,43 @@ public class CustomerService implements CustomerServiceAccess {
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest customerRequest) {
         Customer customer = new Customer();
-        customer.name = customerRequest.getName();
-        customer.surname = customerRequest.getSurname();
+        customer.setName(customerRequest.getName());
+        customer.setSurname(customerRequest.getSurname());
         customerDataLayer.persist(customer);
 
-        return new CustomerResponse(customer.id, customer.name, customer.surname);
+        return new CustomerResponse(customer.getId(), customer.getName(), customer.getSurname());
     }
 
     @Override
-    public CustomerResponse getCustomerDetails(Long customerId) {
+    public CustomerResponse getCustomerDetails(Long customerId) throws NotFoundException {
         Customer customer = customerDataLayer.findById(customerId);
         if (customer == null) {
-            return null;
+            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
         }
-        return new CustomerResponse(customer.id, customer.name, customer.surname);
+        return new CustomerResponse(customer.getId(), customer.getName(), customer.getSurname());
     }
 
     @Override
     @Transactional
-    public CustomerResponse updateCustomerDetails(Long customerId, CustomerRequest customerRequest) {
+    public CustomerResponse updateCustomerDetails(Long customerId, CustomerRequest customerRequest) throws NotFoundException {
         Customer customer = customerDataLayer.findById(customerId);
         if (customer == null) {
-            return null;
+            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
         }
-        customer.name = customerRequest.getName();
-        customer.surname = customerRequest.getSurname();
+        customer.setName(customerRequest.getName());
+        customer.setSurname(customerRequest.getSurname());
         customerDataLayer.persist(customer);
 
-        return new CustomerResponse(customer.id, customer.name, customer.surname);
+        return new CustomerResponse(customer.getId(), customer.getName(), customer.getSurname());
     }
 
     @Override
     @Transactional
-    public boolean deleteCustomer(Long customerId) {
+    public void deleteCustomer(Long customerId) throws NotFoundException {
         Customer customer = customerDataLayer.findById(customerId);
         if (customer == null) {
-            return false;
+            throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
         }
         customerDataLayer.delete(customer);
-        return true;
     }
 }

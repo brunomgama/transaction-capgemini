@@ -7,8 +7,4 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CustomerDataLayer implements PanacheRepository<Customer> {
 
-    public Customer findById(Long id) {
-        return find("id", id).firstResult();
-    }
-
 }

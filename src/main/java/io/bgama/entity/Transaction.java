@@ -1,6 +1,8 @@
 package io.bgama.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 /**
  * Example JPA entity.
@@ -8,14 +10,46 @@ import jakarta.persistence.*;
  */
 @Entity
 public class Transaction {
+
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 
-    @OneToOne
-    public Account account;
+    private Long accountId;
 
-    public Boolean isDebit;
+    private Boolean isDebit;
 
-    public Long amount;
+    private Long amount;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    public Boolean getDebit() {
+        return isDebit;
+    }
+
+    public void setDebit(Boolean debit) {
+        isDebit = debit;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
 }

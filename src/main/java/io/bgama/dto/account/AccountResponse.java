@@ -1,15 +1,13 @@
 package io.bgama.dto.account;
 
-import io.bgama.entity.Customer;
-
 public class AccountResponse {
     private Long accountId;
-    private Customer customer;
+    private Long customerId;
     private Long balance;
 
-    public AccountResponse(Long accountId, Customer customer, Long balance) {
+    public AccountResponse(Long accountId, Long customerId, Long balance) {
         this.accountId = accountId;
-        this.customer = customer;
+        this.customerId = customerId;
         this.balance = balance;
     }
 
@@ -21,12 +19,12 @@ public class AccountResponse {
         this.accountId = accountId;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Long getBalance() {
