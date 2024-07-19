@@ -6,10 +6,14 @@ import io.bgama.dto.customer.CustomerRequest;
 import io.bgama.dto.customer.CustomerResponse;
 import io.bgama.entity.Customer;
 import io.bgama.error.ErrorMessage;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service implementation for managing customer-related operations.
@@ -49,6 +53,18 @@ public class CustomerService implements CustomerServiceAccess {
     public CustomerResponse getCustomerDetails(Long customerId) throws NotFoundException {
         Customer customer = checkCustomer(customerId);
         return new CustomerResponse(customer.getId(), customer.getName(), customer.getSurname());
+    }
+
+    /**
+     * Retrieves all Customers from the data layer and maps them to CustomerResponse objects.
+     * @return a list of CustomerResponse objects containing account details.
+     */
+    @Override
+    public List<CustomerResponse> getAllCustomers() {
+        List<Customer> customers = customerDataLayer.findAll(Sort.ascending("id")).list();
+        return customers.stream()
+                .map(customer -> new CustomerResponse(customer.getId(), customer.getName(), customer.getSurname()))
+                .collect(Collectors.toList());
     }
 
     /**

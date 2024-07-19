@@ -4,6 +4,8 @@ import io.bgama.dto.account.AccountRequest;
 import io.bgama.dto.account.AccountResponse;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
+
 /**
  * Interface for accessing account-related operations.
  * @author brunogama
@@ -27,6 +29,12 @@ public interface AccountServiceAccess {
      * @throws NotFoundException    If the account with the specified ID is not found.
      */
     AccountResponse getAccountDetails(Long accountId) throws NotFoundException;
+
+    /**
+     * Retrieves a list of all customers.
+     * @return A list of CustomerResponse objects.
+     */
+    List<AccountResponse> getAllAccounts();
 
     /**
      * Updates details of the account associated with the specified account ID.

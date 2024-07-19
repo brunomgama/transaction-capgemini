@@ -10,6 +10,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.List;
+
 /**
  * Resource class for handling customer-related REST endpoints.
  * This class provides endpoints for creating, retrieving, updating, and deleting customers.
@@ -57,6 +59,21 @@ public class CustomerResource {
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
+        }
+    }
+
+    /**
+     * Endpoint for retrieving all customers.
+     * @return HTTP response with the list of all customers.
+     */
+    @GET
+    public Response getAllCustomers() {
+        try {
+            List<CustomerResponse> customers = customerService.getAllCustomers();
+            return Response.ok(customers).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();

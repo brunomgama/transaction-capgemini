@@ -1,9 +1,4 @@
 -- This file allow to write SQL commands that will be emitted in test and dev.
--- The commands are commented as their support depends of the database
--- insert into myentity (id, field) values(1, 'field-1');
--- insert into myentity (id, field) values(2, 'field-2');
--- insert into myentity (id, field) values(3, 'field-3');
--- alter sequence myentity_seq restart with 4;
 
 INSERT INTO customer (id, name, surname) values (1, 'Bruno', 'Gama');
 INSERT INTO customer (id, name, surname) values (2, 'Alice', 'Smith');
@@ -25,4 +20,15 @@ INSERT INTO customer (id, name, surname) values (17, 'Henry', 'Thomas');
 INSERT INTO customer (id, name, surname) values (18, 'Evelyn', 'Taylor');
 INSERT INTO customer (id, name, surname) values (19, 'Alexander', 'Moore');
 INSERT INTO customer (id, name, surname) values (20, 'Harper', 'Jackson');
+
+INSERT INTO account (id, customerId, balance) values (1, 4, 100);
+INSERT INTO account (id, customerId, balance) values (2, 5, 50);
+INSERT INTO account (id, customerId, balance) values (3, 6, 200);
+
+INSERT INTO transaction (id, accountId, isDebit, amount) values (1, 3, true, 20);
+INSERT INTO transaction (id, accountId, isDebit, amount) values (2, 3, true, 10);
+INSERT INTO transaction (id, accountId, isDebit, amount) values (3, 3, true, 5);
+
 ALTER SEQUENCE customer_seq RESTART WITH 21;
+ALTER SEQUENCE account_seq RESTART WITH 4;
+ALTER SEQUENCE transaction_seq RESTART WITH 4;

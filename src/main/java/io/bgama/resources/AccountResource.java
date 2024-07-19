@@ -10,6 +10,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.List;
+
 /**
  * Resource class for handling account-related REST endpoints.
  * This class provides endpoints for creating, retrieving, updating, and deleting accounts.
@@ -60,6 +62,21 @@ public class AccountResource {
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
+        }
+    }
+
+    /**
+     * Endpoint for retrieving all customers.
+     * @return HTTP response with the list of all customers.
+     */
+    @GET
+    public Response getAllCustomers() {
+        try {
+            List<AccountResponse> accounts = accountService.getAllAccounts();
+            return Response.ok(accounts).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();

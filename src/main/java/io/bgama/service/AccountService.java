@@ -8,10 +8,14 @@ import io.bgama.dto.account.AccountResponse;
 import io.bgama.entity.Account;
 import io.bgama.entity.Customer;
 import io.bgama.error.ErrorMessage;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service implementation for managing account-related operations.
@@ -58,6 +62,18 @@ public class AccountService implements AccountServiceAccess {
     public AccountResponse getAccountDetails(Long accountId) throws NotFoundException {
         Account account = checkAccount(accountId);
         return new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance());
+    }
+
+    /**
+     * Retrieves all accounts from the data layer and maps them to AccountResponse objects.
+     * @return a list of AccountResponse objects containing account details.
+     */
+    @Override
+    public List<AccountResponse> getAllAccounts() {
+        List<Account> accountList = accountDataLayer.findAll(Sort.ascending("id")).list();
+        return accountList.stream()
+                .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
+                .collect(Collectors.toList());
     }
 
     /**

@@ -4,6 +4,8 @@ import io.bgama.dto.customer.CustomerRequest;
 import io.bgama.dto.customer.CustomerResponse;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
+
 /**
  * Interface for accessing customer-related operations.
  * @author brunogama
@@ -27,6 +29,12 @@ public interface CustomerServiceAccess {
      * @throws NotFoundException    If the customer with the specified ID is not found.
      */
     CustomerResponse getCustomerDetails(Long customerId) throws NotFoundException;
+
+    /**
+     * Retrieves a list of all customers.
+     * @return A list of CustomerResponse objects.
+     */
+    List<CustomerResponse> getAllCustomers();
 
     /**
      * Updates details of the customer associated with the specified customer ID.

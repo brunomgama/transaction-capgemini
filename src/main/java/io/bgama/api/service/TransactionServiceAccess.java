@@ -4,6 +4,8 @@ import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
+
 /**
  * Interface for accessing transaction-related operations.
  * @author brunogama
@@ -27,6 +29,13 @@ public interface TransactionServiceAccess {
      * @throws NotFoundException    If the transaction with the specified ID is not found.
      */
     TransactionResponse getTransactionDetails(Long transactionId) throws NotFoundException;
+
+    /**
+     * Retrieves a list of all customers.
+     * @return A list of CustomerResponse objects.
+     */
+    List<TransactionResponse> getAllTransactions();
+
 
     /**
      * Updates details of the transaction associated with the specified transaction ID.
