@@ -57,7 +57,7 @@ public class AccountService implements AccountServiceAccess {
         if(accountRequest.getBalance() > 0) {
             Transaction transaction = new Transaction();
             transaction.setAccountId(account.getId());
-            transaction.setDebit(true);
+            transaction.setDebit(false);
             transaction.setAmount(accountRequest.getBalance());
 
             transactionDataLayer.persist(transaction);
