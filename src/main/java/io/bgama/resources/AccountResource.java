@@ -69,6 +69,26 @@ public class AccountResource {
     }
 
     /**
+     * Endpoint for retrieving account details by User Id.
+     * @param userId    The ID of the user to retrieve.
+     * @return          HTTP response with the account details.
+     */
+    @GET
+    @Path("/filter/{userId}")
+    public Response getAccountPerUser(@PathParam("userId") Long userId) {
+        try {
+            List<AccountResponse> accounts = accountService.getAccountPerUser(userId);
+            return Response.ok(accounts).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
+        }
+    }
+
+    /**
      * Endpoint for retrieving all customers.
      * @return HTTP response with the list of all customers.
      */

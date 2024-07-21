@@ -31,6 +31,15 @@ public interface AccountServiceAccess {
     AccountResponse getAccountDetails(Long accountId) throws NotFoundException;
 
     /**
+     * Retrieves details of the account associated with the specified user ID.
+     *
+     * @param userId                The unique identifier of the user.
+     * @return                      The response containing details of the account.
+     * @throws NotFoundException    If the account with the specified ID is not found.
+     */
+    List<AccountResponse> getAccountPerUser(Long userId) throws NotFoundException;
+
+    /**
      * Retrieves a list of all customers.
      * @return A list of CustomerResponse objects.
      */

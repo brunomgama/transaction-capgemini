@@ -1,6 +1,7 @@
 package io.bgama.resources;
 
 import io.bgama.api.service.TransactionServiceAccess;
+import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import io.bgama.error.ErrorMessage;
@@ -73,10 +74,30 @@ public class TransactionResource {
      * @return HTTP response with the list of all customers.
      */
     @GET
-    public Response getAllCustomers() {
+    public Response getAllTransactions() {
         try {
             List<TransactionResponse> transactions = transactionService.getAllTransactions();
             return Response.ok(transactions).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
+        }
+    }
+
+    /**
+     * Endpoint for retrieving transaction details by Account ID
+     * @param accountId    The ID of the account to retrieve.
+     * @return          HTTP response with the account details.
+     */
+    @GET
+    @Path("/filter/{accountId}")
+    public Response getTransactionPerAccount(@PathParam("accountId") Long accountId) {
+        try {
+            List<TransactionResponse> transactions = transactionService.getTransactionPerAccount(accountId);
+            return Response.ok(transactions).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.ACCOUNT_NOT_FOUND.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();

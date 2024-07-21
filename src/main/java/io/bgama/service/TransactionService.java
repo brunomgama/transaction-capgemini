@@ -3,6 +3,7 @@ package io.bgama.service;
 import io.bgama.api.service.TransactionServiceAccess;
 import io.bgama.datalayer.AccountDataLayer;
 import io.bgama.datalayer.TransactionDataLayer;
+import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import io.bgama.entity.Account;
@@ -70,6 +71,19 @@ public class TransactionService implements TransactionServiceAccess {
     public List<TransactionResponse> getAllTransactions() {
         List<Transaction> transactions = transactionDataLayer.findAll(Sort.ascending("id")).list();
         return transactions.stream()
+                .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves transactions from a specific account from the data layer and maps them to TransactionResponse objects.
+     * @return a list of TransactionResponse objects containing account details.
+     */
+    @Override
+    public List<TransactionResponse> getTransactionPerAccount(Long accountId) {
+        List<Transaction> transactionList = transactionDataLayer.findAll(Sort.ascending("id")).list();
+        return transactionList.stream()
+                .filter(account -> account.getAccountId().equals(accountId))
                 .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount()))
                 .collect(Collectors.toList());
     }

@@ -3,10 +3,12 @@ package io.bgama.service;
 import io.bgama.api.service.AccountServiceAccess;
 import io.bgama.datalayer.AccountDataLayer;
 import io.bgama.datalayer.CustomerDataLayer;
+import io.bgama.datalayer.TransactionDataLayer;
 import io.bgama.dto.account.AccountRequest;
 import io.bgama.dto.account.AccountResponse;
 import io.bgama.entity.Account;
 import io.bgama.entity.Customer;
+import io.bgama.entity.Transaction;
 import io.bgama.error.ErrorMessage;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,6 +34,9 @@ public class AccountService implements AccountServiceAccess {
     @Inject
     CustomerDataLayer customerDataLayer;
 
+    @Inject
+    TransactionDataLayer transactionDataLayer;
+
     /**
      * Creates a new account based on the provided account request.
      * @param accountRequest     The request containing account details.
@@ -48,6 +53,15 @@ public class AccountService implements AccountServiceAccess {
         account.setBalance(accountRequest.getBalance());
 
         accountDataLayer.persist(account);
+
+        if(accountRequest.getBalance() > 0) {
+            Transaction transaction = new Transaction();
+            transaction.setAccountId(account.getId());
+            transaction.setDebit(true);
+            transaction.setAmount(accountRequest.getBalance());
+
+            transactionDataLayer.persist(transaction);
+        }
 
         return new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance());
     }
@@ -72,6 +86,19 @@ public class AccountService implements AccountServiceAccess {
     public List<AccountResponse> getAllAccounts() {
         List<Account> accountList = accountDataLayer.findAll(Sort.ascending("id")).list();
         return accountList.stream()
+                .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves accounts from a specific user from the data layer and maps them to AccountResponse objects.
+     * @return a list of AccountResponse objects containing account details.
+     */
+    @Override
+    public List<AccountResponse> getAccountPerUser(Long userId) {
+        List<Account> accountList = accountDataLayer.findAll(Sort.ascending("id")).list();
+        return accountList.stream()
+                .filter(account -> account.getCustomerId().equals(userId))
                 .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
                 .collect(Collectors.toList());
     }

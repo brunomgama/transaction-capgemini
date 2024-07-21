@@ -1,5 +1,6 @@
 package io.bgama.api.service;
 
+import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import jakarta.ws.rs.NotFoundException;
@@ -36,6 +37,14 @@ public interface TransactionServiceAccess {
      */
     List<TransactionResponse> getAllTransactions();
 
+    /**
+     * Retrieves details of the transaction associated with the specified account ID.
+     *
+     * @param accountId                The unique identifier of the account.
+     * @return                      The response containing details of the account.
+     * @throws NotFoundException    If the account with the specified ID is not found.
+     */
+    List<TransactionResponse> getTransactionPerAccount(Long accountId) throws NotFoundException;
 
     /**
      * Updates details of the transaction associated with the specified transaction ID.
