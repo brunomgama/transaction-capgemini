@@ -39,7 +39,7 @@ public class TransactionService implements TransactionServiceAccess {
     @Override
     @Transactional
     public TransactionResponse createTransaction(TransactionRequest transactionRequest) throws NotFoundException {
-        checkAccount(transactionRequest);
+        Account account = checkAccount(transactionRequest);
 
         Transaction transaction = new Transaction();
         transaction.setAccountId(transactionRequest.getAccountId());
@@ -47,6 +47,13 @@ public class TransactionService implements TransactionServiceAccess {
         transaction.setAmount(transactionRequest.getAmount());
 
         transactionDataLayer.persist(transaction);
+
+        if(transaction.getDebit()) {
+            account.setBalance(account.getBalance() - transaction.getAmount());
+        } else {
+            account.setBalance(account.getBalance() + transaction.getAmount());
+        }
+        accountDataLayer.persist(account);
         return new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount());
     }
 
@@ -99,7 +106,7 @@ public class TransactionService implements TransactionServiceAccess {
     public TransactionResponse updateTransactionDetails(Long transactionId, TransactionRequest transactionRequest) throws NotFoundException {
         Transaction transaction = checkTransaction(transactionId);
 
-        checkAccount(transactionRequest);
+        Account account = checkAccount(transactionRequest);
 
         transaction.setAccountId(transactionRequest.getAccountId());
         transaction.setDebit(transactionRequest.getIsDebit());
@@ -140,10 +147,12 @@ public class TransactionService implements TransactionServiceAccess {
      * @param transactionRequest the request object containing transaction details
      * @throws NotFoundException if the account is not found
      */
-    private void checkAccount(TransactionRequest transactionRequest) {
+    private Account checkAccount(TransactionRequest transactionRequest) {
         Account account = accountDataLayer.findById(transactionRequest.getAccountId());
         if (account == null) {
             throw new NotFoundException(String.valueOf(Response.Status.NOT_FOUND));
         }
+
+        return account;
     }
 }

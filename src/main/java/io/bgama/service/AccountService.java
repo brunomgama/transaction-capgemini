@@ -10,7 +10,6 @@ import io.bgama.entity.Account;
 import io.bgama.entity.Customer;
 import io.bgama.entity.Transaction;
 import io.bgama.error.ErrorMessage;
-import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
