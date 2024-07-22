@@ -10,6 +10,7 @@ import io.bgama.entity.Account;
 import io.bgama.entity.Customer;
 import io.bgama.entity.Transaction;
 import io.bgama.error.ErrorMessage;
+import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -54,7 +55,7 @@ public class AccountService implements AccountServiceAccess {
 
         accountDataLayer.persist(account);
 
-        if(accountRequest.getBalance() > 0) {
+        if(accountRequest.getBalance() != null && accountRequest.getBalance() > 0) {
             Transaction transaction = new Transaction();
             transaction.setAccountId(account.getId());
             transaction.setDebit(false);
@@ -96,9 +97,8 @@ public class AccountService implements AccountServiceAccess {
      */
     @Override
     public List<AccountResponse> getAccountPerUser(Long userId) {
-        List<Account> accountList = accountDataLayer.findAll(Sort.ascending("id")).list();
+        List<Account> accountList = accountDataLayer.find("customerId", Sort.ascending("id"), Parameters.with("customerId", userId)).list();
         return accountList.stream()
-                .filter(account -> account.getCustomerId().equals(userId))
                 .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
                 .collect(Collectors.toList());
     }

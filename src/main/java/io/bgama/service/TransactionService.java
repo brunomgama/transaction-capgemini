@@ -7,6 +7,7 @@ import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import io.bgama.entity.Account;
 import io.bgama.entity.Transaction;
+import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -80,9 +81,8 @@ public class TransactionService implements TransactionServiceAccess {
      */
     @Override
     public List<TransactionResponse> getTransactionPerAccount(Long accountId) {
-        List<Transaction> transactionList = transactionDataLayer.findAll(Sort.ascending("id")).list();
+        List<Transaction> transactionList = transactionDataLayer.find("accountId", Sort.ascending("id"), Parameters.with("accountId", accountId)).list();
         return transactionList.stream()
-                .filter(account -> account.getAccountId().equals(accountId))
                 .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount()))
                 .collect(Collectors.toList());
     }

@@ -1,77 +1,346 @@
-# transation-capgemini
+# Application Documentation
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Overview
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+The application provides an API for managing the opening of new current accounts for already existing customers. 
 
-## Running the application in dev mode
+It includes functionalities to create new accounts, perform transactions, and retrieve user information including account balance and transaction history.
 
-You can run your application in dev mode that enables live coding using:
+## How to Use the Application
 
-```shell script
-./mvnw compile quarkus:dev
+### Prerequisites
+
+- Docker must be installed and running.
+- Git must be installed.
+
+### Clone the Repositories
+
+Clone the frontend and backend repositories:
+```sh
+git clone https://github.com/brunomgama/transaction-frontend
+git clone https://github.com/brunomgama/transaction-capgemini
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+### Run the Frontend
 
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
+Navigate to the frontend directory and start the development server:
+```sh
+cd transaction-frontend
+npm run dev
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+### Run the Backend
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+Navigate to the backend directory and start the development server:
+```sh
+cd transaction-capgemini
+mvn compile quarkus:dev
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+When Quarkus starts, it will initialize a Docker container with a PostgreSQL database with the following properties:
+- `quarkus.datasource.devservices.username=postgres`
+- `quarkus.datasource.devservices.password=postgres`
+- `quarkus.datasource.devservices.port=5432`
 
-## Creating a native executable
+### Initial Data
 
-You can create a native executable using:
+Upon initialization, the database will be seeded with the following data:
 
-```shell script
-./mvnw package -Dnative
+#### Customers
+```sql
+INSERT INTO customer (id, name, surname) VALUES (1, 'Bruno', 'Gama'), (2, 'Alice', 'Smith'), ..., (20, 'Harper', 'Jackson');
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+#### Accounts
+```sql
+INSERT INTO account (id, customerId, balance) VALUES (1, 4, 100), (2, 5, 50), (3, 6, 200);
 ```
 
-You can then execute your native executable with: `./target/transation-capgemini-1.0.0-SNAPSHOT-runner`
+#### Transactions
+```sql
+INSERT INTO transaction (id, accountId, isDebit, amount) VALUES (1, 3, true, 20.0), (2, 3, true, 10.5), (3, 3, true, 5.25);
+```
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+## API Endpoints
 
-## Related Guides
+### Account Endpoints
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and Jakarta Persistence
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
+- **Create Account**
+    - **Endpoint:** `http://localhost:8080/account`
+    - **Method:** <span style="color:yellow">**POST**</span>.
+    - **Description:** Creates one single account.
+    - **Request Body:**
+      ```json
+      {
+        "customerId": Long,
+        "balance": Double
+      }
+      ```
+    - **Response:**
+      ```json
+      [
+        {
+          "accountId": Long,
+          "customerId": Long,
+          "balance": Double
+        }
+      ]
+      ```
 
-## Provided Code
+- **Get Account Details**
+    - **Endpoint:** `http://localhost:8080/account/{accountId}`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves a specific account by the given `accountId`.
+    - **Response:**
+      ```json
+      {
+        "accountId": Long,
+        "customerId": Long,
+        "balance": Double
+      }
+        ```
 
-### Hibernate ORM
+- **Get Accounts by User**
+    - **Endpoint:** `http://localhost:8080/account/filter/{userId}`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves all accounts associated with a specific user by `userId`.
+    - **Response:**
+      ```json
+      [
+        {
+          "accountId": Long,
+          "customerId": Long,
+          "balance": Double
+        }
+      ]
+      ```
 
-Create your first JPA entity
+- **Get All Accounts**
+    - **Endpoint:** `http://localhost:8080/account`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves all existent accounts.
+    - **Response:**
+      ```json
+      [
+        {
+          "accountId": Long,
+          "customerId": Long,
+          "balance": Double
+        }
+      ]
+      ```     
 
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
+- **Update Account**
+    - **Endpoint:** `http://localhost:8080/account/{accountId}`
+    - **Method:** <span style="color:orange">**PUT**</span>.
+    - **Description:** Updates details of a specific account by `accountId`.
+    - **Request Body:**
+      ```json
+      {
+        "customerId": Long,
+        "balance": Double
+      }
+      ```
+    - **Response:**
+      ```json
+      {
+        "Account with id xxx has been updated."
+      }
+      ```
+
+- **Delete Account**
+    - **Endpoint:** `http://localhost:8080/account/{accountId}`
+    - **Method:** <span style="color:red">**DELETE**</span>.
+    - **Description:** Deletes a specific account by `accountId`.
+    - **Response:**
+      ```json
+      {
+        "Account has been deleted"
+      }
+      ```
 
 
+### Customer Endpoints
 
-### REST
+- **Create Customer**
+    - **Endpoint:** `http://localhost:8080/customer`
+    - **Method:** <span style="color:yellow">**POST**</span>.
+    - **Description:** Creates one single customer.
+    - **Request Body:**
+      ```json
+      {
+        "name": String,
+        "surname": String
+      }
+      ```
+    - **Response:**
+      ```json
+      [
+        {
+        "id": Long,
+        "name": String,
+        "surname": String
+        }
+      ]
+      ```
 
-Easily start your REST Web Services
+- **Get Customer Details**
+    - **Endpoint:** `http://localhost:8080/customer/{customerId}`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves a specific customer by the given `id`.
+    - **Response:**
+      ```json
+      {
+        "id": Long,
+        "name": String,
+        "surname": String
+      }
+        ```
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- **Get All Customers**
+    - **Endpoint:** `http://localhost:8080/customer`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves all existent customers.
+    - **Response:**
+      ```json
+      [
+        {
+          "id": Long,
+          "name": String,
+          "surname": String
+        }
+      ]
+      ```     
+
+- **Update Customer**
+    - **Endpoint:** `http://localhost:8080/customer/{id}`
+    - **Method:** <span style="color:orange">**PUT**</span>.
+    - **Description:** Updates details of a specific customer by `id`.
+    - **Request Body:**
+      ```json
+      {
+          "name": String,
+          "surname": String
+      }
+      ```
+    - **Response:**
+      ```json
+      "Customer with id xxx has been updated."
+      ```
+
+- **Delete Customer**
+    - **Endpoint:** `http://localhost:8080/customer/{customerId}`
+    - **Method:** <span style="color:red">**DELETE**</span>.
+    - **Description:** Deletes a specific customer by `id`.
+    - **Response:**
+      ```json
+      {
+      "Customer has been deleted"
+      }
+      ```
+
+
+### Transaction Endpoints
+
+- **Create Transaction**
+    - **Endpoint:** `http://localhost:8080/transaction`
+    - **Method:** <span style="color:yellow">**POST**</span>.
+    - **Description:** Creates one single transaction.
+    - **Request Body:**
+      ```json
+      {
+        "accountId": Long,
+        "isDebit": Boolean,
+        "amount": Double
+      }
+      ```
+    - **Response:**
+      ```json
+      [
+        {
+        "id": Long,
+        "accountId": Long,
+        "isDebit": Boolean,
+        "amount": Double
+        }
+      ]
+      ```
+
+  - **Get Transaction Details**
+      - **Endpoint:** `http://localhost:8080/transaction/{transactionId}`
+      - **Method:** <span style="color:green">**GET**</span>.
+      - **Description:** Retrieves a specific transaction by the given `transactionId`.
+      - **Response:**
+        ```json
+        {
+        "id": Long,
+        "accountId": Long,
+        "isDebit": Boolean,
+        "amount": Double
+        }
+          ```
+
+- **Get Transactions by User**
+    - **Endpoint:** `http://localhost:8080/transaction/filter/{accountId}`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves all transactions associated with a specific account by `accountId`.
+    - **Response:**
+      ```json
+      [
+        {
+        "id": Long,
+        "accountId": Long,
+        "isDebit": Boolean,
+        "amount": Double
+        }
+      ]
+      ```
+
+- **Get All Transactions**
+    - **Endpoint:** `http://localhost:8080/transaction`
+    - **Method:** <span style="color:green">**GET**</span>.
+    - **Description:** Retrieves all existent transactions.
+    - **Response:**
+      ```json
+      [
+        {
+          "transactionId": Long,
+          "customerId": Long,
+          "balance": Double
+        }
+      ]
+      ```     
+
+- **Update Transaction**
+    - **Endpoint:** `http://localhost:8080/transaction/{transactionId}`
+    - **Method:** <span style="color:orange">**PUT**</span>.
+    - **Description:** Updates details of a specific transaction by `transactionId`.
+    - **Request Body:**
+      ```json
+      {
+      "accountId": Long,
+      "isDebit": Boolean,
+      "amount": Double
+      }
+      ```
+    - **Response:**
+      ```json
+      {
+        "Transaction with id xxx has been updated."
+      }
+      ```
+
+- **Delete Transaction**
+    - **Endpoint:** `http://localhost:8080/transaction/{transactionId}`
+    - **Method:** <span style="color:red">**DELETE**</span>.
+    - **Description:** Deletes a specific transaction by `accountId`.
+    - **Response:**
+      ```json
+      {
+        "Transaction has been deleted"
+      }
+      ```
+
+## Conclusion
+
+This documentation provides a comprehensive guide to using the API for managing current accounts and transactions. By following the steps outlined, users can set up the application, interact with the endpoints, and manage customer accounts efficiently.
