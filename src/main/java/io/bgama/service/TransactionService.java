@@ -81,7 +81,7 @@ public class TransactionService implements TransactionServiceAccess {
      */
     @Override
     public List<TransactionResponse> getTransactionPerAccount(Long accountId) {
-        List<Transaction> transactionList = transactionDataLayer.find("accountId", Sort.ascending("id"), Parameters.with("accountId", accountId)).list();
+        List<Transaction> transactionList = transactionDataLayer.find("accountId", Sort.ascending("id"), accountId).list();
         return transactionList.stream()
                 .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount()))
                 .collect(Collectors.toList());

@@ -97,7 +97,7 @@ public class AccountService implements AccountServiceAccess {
      */
     @Override
     public List<AccountResponse> getAccountPerUser(Long userId) {
-        List<Account> accountList = accountDataLayer.find("customerId", Sort.ascending("id"), Parameters.with("customerId", userId)).list();
+        List<Account> accountList = accountDataLayer.find("customerId", Sort.ascending("id"), userId).list();
         return accountList.stream()
                 .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
                 .collect(Collectors.toList());
