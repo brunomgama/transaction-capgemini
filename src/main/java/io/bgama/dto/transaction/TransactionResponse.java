@@ -8,7 +8,7 @@ public class TransactionResponse {
     private Long id;
     private Long accountId;
     private Boolean isDebit;
-    private Long amount;
+    private Double amount;
 
     /**
      * Constructs a TransactionResponse object with the specified details.
@@ -17,7 +17,7 @@ public class TransactionResponse {
      * @param isDebit   Whether the transaction is a debit or not.
      * @param amount    The amount associated with the transaction.
      */
-    public TransactionResponse(Long id, Long accountId, Boolean isDebit, Long amount) {
+    public TransactionResponse(Long id, Long accountId, Boolean isDebit, Double amount) {
         this.id = id;
         this.accountId = accountId;
         this.isDebit = isDebit;
@@ -76,7 +76,7 @@ public class TransactionResponse {
      * Retrieves the amount associated with the transaction.
      * @return The transaction amount.
      */
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -84,7 +84,7 @@ public class TransactionResponse {
      * Sets the amount associated with the transaction.
      * @param amount The transaction amount to set.
      */
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 }

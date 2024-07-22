@@ -25,9 +25,9 @@ INSERT INTO account (id, customerId, balance) values (1, 4, 100);
 INSERT INTO account (id, customerId, balance) values (2, 5, 50);
 INSERT INTO account (id, customerId, balance) values (3, 6, 200);
 
-INSERT INTO transaction (id, accountId, isDebit, amount) values (1, 3, true, 20);
-INSERT INTO transaction (id, accountId, isDebit, amount) values (2, 3, true, 10);
-INSERT INTO transaction (id, accountId, isDebit, amount) values (3, 3, true, 5);
+INSERT INTO transaction (id, accountId, isDebit, amount) values (1, 3, true, 20.0);
+INSERT INTO transaction (id, accountId, isDebit, amount) values (2, 3, true, 10.5);
+INSERT INTO transaction (id, accountId, isDebit, amount) values (3, 3, true, 5.25);
 
 ALTER SEQUENCE customer_seq RESTART WITH 21;
 ALTER SEQUENCE account_seq RESTART WITH 4;

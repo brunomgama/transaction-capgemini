@@ -7,7 +7,7 @@ package io.bgama.dto.account;
 public class AccountResponse {
     private Long accountId;
     private Long customerId;
-    private Long balance;
+    private Double balance;
 
     /**
      * Constructs an AccountResponse object with the specified details.
@@ -16,7 +16,7 @@ public class AccountResponse {
      * @param customerId The customer ID associated with the account.
      * @param balance    The balance of the account.
      */
-    public AccountResponse(Long accountId, Long customerId, Long balance) {
+    public AccountResponse(Long accountId, Long customerId, Double balance) {
         this.accountId = accountId;
         this.customerId = customerId;
         this.balance = balance;
@@ -58,7 +58,7 @@ public class AccountResponse {
      * Retrieves the balance of the account.
      * @return The balance.
      */
-    public Long getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
@@ -66,7 +66,7 @@ public class AccountResponse {
      * Sets the balance of the account.
      * @param balance The balance to set.
      */
-    public void setBalance(Long balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 }

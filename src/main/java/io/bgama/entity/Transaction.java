@@ -20,7 +20,7 @@ public class Transaction {
 
     private Boolean isDebit;
 
-    private Long amount;
+    private Double amount;
 
     /**
      * Retrieves the ID of the transaction.
@@ -74,7 +74,7 @@ public class Transaction {
      * Retrieves the amount associated with the transaction.
      * @return The amount associated with the transaction.
      */
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -82,7 +82,7 @@ public class Transaction {
      * Sets the amount associated with the transaction.
      * @param amount The amount to set.
      */
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 }

@@ -1,6 +1,5 @@
 package io.bgama.api.service;
 
-import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import jakarta.ws.rs.NotFoundException;

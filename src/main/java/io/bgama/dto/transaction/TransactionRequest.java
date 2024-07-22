@@ -7,7 +7,7 @@ package io.bgama.dto.transaction;
 public class TransactionRequest {
     private Long accountId;
     private Boolean isDebit;
-    private Long amount;
+    private Double amount;
 
     /**
      * Retrieves the ID of the account associated with the transaction.
@@ -45,7 +45,7 @@ public class TransactionRequest {
      * Retrieves the amount associated with the transaction.
      * @return The transaction amount.
      */
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -53,7 +53,7 @@ public class TransactionRequest {
      * Sets the amount associated with the transaction.
      * @param amount The transaction amount to set.
      */
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 }

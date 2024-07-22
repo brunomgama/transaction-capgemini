@@ -3,7 +3,6 @@ package io.bgama.service;
 import io.bgama.api.service.TransactionServiceAccess;
 import io.bgama.datalayer.AccountDataLayer;
 import io.bgama.datalayer.TransactionDataLayer;
-import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import io.bgama.entity.Account;

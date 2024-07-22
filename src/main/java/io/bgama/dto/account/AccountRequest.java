@@ -6,7 +6,7 @@ package io.bgama.dto.account;
  */
 public class AccountRequest {
     private Long customerId;
-    private Long balance;
+    private Double balance;
 
     /**
      * Retrieves the customer ID associated with the account.
@@ -28,7 +28,7 @@ public class AccountRequest {
      * Retrieves the balance of the account.
      * @return The balance.
      */
-    public Long getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
@@ -36,7 +36,7 @@ public class AccountRequest {
      * Sets the balance of the account.
      * @param balance The balance to set.
      */
-    public void setBalance(Long balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 }

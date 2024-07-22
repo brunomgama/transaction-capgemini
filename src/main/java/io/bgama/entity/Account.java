@@ -18,7 +18,7 @@ public class Account {
 
     private Long customerId;
 
-    private Long balance;
+    private Double balance;
 
     /**
      * Retrieves the ID of the account.
@@ -56,7 +56,7 @@ public class Account {
      * Retrieves the balance of the account.
      * @return The balance of the account.
      */
-    public Long getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
@@ -64,7 +64,7 @@ public class Account {
      * Sets the balance of the account.
      * @param balance The balance to set.
      */
-    public void setBalance(Long balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 }
