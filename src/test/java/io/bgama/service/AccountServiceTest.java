@@ -125,7 +125,7 @@ public class AccountServiceTest {
 
         PanacheQuery<Account> mockQuery = Mockito.mock(PanacheQuery.class);
         Mockito.when(mockQuery.list()).thenReturn(List.of(resultAccount));
-        Mockito.when(accountDataLayer.find(Mockito.anyString(), Mockito.any(Sort.class), Mockito.any(Parameters.class))).thenReturn(mockQuery);
+        Mockito.when(accountDataLayer.find(Mockito.anyString(), Mockito.any(Sort.class), Mockito.any(Object[].class))).thenReturn(mockQuery);
 
         List<AccountResponse> response = accountService.getAccountPerUser(1L);
 

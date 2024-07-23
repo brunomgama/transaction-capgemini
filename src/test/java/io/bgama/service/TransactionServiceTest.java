@@ -1,8 +1,13 @@
 package io.bgama.service;
 
+import io.bgama.datalayer.AccountDataLayer;
+import io.bgama.datalayer.CustomerDataLayer;
 import io.bgama.datalayer.TransactionDataLayer;
+import io.bgama.dto.account.AccountRequest;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
+import io.bgama.entity.Account;
+import io.bgama.entity.Customer;
 import io.bgama.entity.Transaction;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
@@ -28,8 +33,29 @@ public class TransactionServiceTest {
     @MockitoConfig
     TransactionDataLayer transactionDataLayer;
 
+    @InjectMock
+    @MockitoConfig
+    CustomerDataLayer customerDataLayer;
+    @InjectMock
+    @MockitoConfig
+    AccountDataLayer accountDataLayer;
+
     @Test
     void testCreateTransaction() {
+        Customer customer = new Customer();
+        customer.setName("abc");
+        customer.setSurname("Gama");
+        customerDataLayer.persist(customer);
+
+        Mockito.when(customerDataLayer.findById(Mockito.anyLong())).thenReturn(customer);
+
+        Account account = new Account();
+        account.setCustomerId(1L);
+        account.setBalance(Double.valueOf(200));
+        accountDataLayer.persist(account);
+
+        Mockito.when(accountDataLayer.findById(Mockito.anyLong())).thenReturn(account);
+
         TransactionRequest request = new TransactionRequest();
         request.setAccountId(2L);
         request.setIsDebit(true);
@@ -74,6 +100,20 @@ public class TransactionServiceTest {
 
     @Test
     void testUpdateTransactionDetails() {
+        Customer customer = new Customer();
+        customer.setName("abc");
+        customer.setSurname("Gama");
+        customerDataLayer.persist(customer);
+
+        Mockito.when(customerDataLayer.findById(Mockito.anyLong())).thenReturn(customer);
+
+        Account account = new Account();
+        account.setCustomerId(1L);
+        account.setBalance(Double.valueOf(200));
+        accountDataLayer.persist(account);
+
+        Mockito.when(accountDataLayer.findById(Mockito.anyLong())).thenReturn(account);
+
         Transaction transaction = new Transaction();
         transaction.setAccountId(2L);
         transaction.setDebit(true);
@@ -104,7 +144,7 @@ public class TransactionServiceTest {
 
         PanacheQuery<Transaction> mockQuery = Mockito.mock(PanacheQuery.class);
         Mockito.when(mockQuery.list()).thenReturn(List.of(transaction));
-        Mockito.when(transactionDataLayer.find(Mockito.anyString(), Mockito.any(Sort.class), Mockito.any(Parameters.class))).thenReturn(mockQuery);
+        Mockito.when(transactionDataLayer.find(Mockito.anyString(), Mockito.any(Sort.class), Mockito.any(Object[].class))).thenReturn(mockQuery);
 
         List<TransactionResponse> response = transactionService.getTransactionPerAccount(1L);
 
