@@ -1,6 +1,5 @@
 package io.bgama.dto;
 
-import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.customer.CustomerResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -27,10 +27,16 @@ public class AccountResourceTest {
     @Test
     void testCreateAccount() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
-        AccountResponse mockResponse = new AccountResponse(1L, 1L, Double.valueOf(0));
+        AccountResponse mockResponse = new AccountResponse(
+                1L, "name", "PT50123",
+                Double.valueOf(2.25), 2L, "icon"
+        );
 
         Mockito.when(accountServiceAccess.createAccount(Mockito.any(AccountRequest.class))).thenReturn(mockResponse);
 
@@ -41,10 +47,16 @@ public class AccountResourceTest {
     @Test
     void testCreateAccount_persistenceException() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
-        AccountResponse mockResponse = new AccountResponse(1L, 1L, Double.valueOf(0));
+        AccountResponse mockResponse = new AccountResponse(
+                1L, "name", "PT50123",
+                Double.valueOf(2.25), 2L, "icon"
+        );
 
         Mockito.when(accountServiceAccess.createAccount(Mockito.any(AccountRequest.class))).thenThrow(PersistenceException.class);
 
@@ -55,8 +67,11 @@ public class AccountResourceTest {
     @Test
     void testCreateAccount_notFoundException() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
         Mockito.when(accountServiceAccess.createAccount(Mockito.any(AccountRequest.class))).thenThrow(NotFoundException.class);
 
@@ -67,8 +82,11 @@ public class AccountResourceTest {
     @Test
     void testCreateAccount_unhandledException() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
         Mockito.when(accountServiceAccess.createAccount(Mockito.any(AccountRequest.class))).thenThrow(BadRequestException.class);
 
@@ -78,7 +96,10 @@ public class AccountResourceTest {
 
     @Test
     void testGetAccountDetails() {
-        AccountResponse mockResponse = new AccountResponse(1L, 1L, Double.valueOf(0));
+        AccountResponse mockResponse = new AccountResponse(
+                1L, "name", "PT50123",
+                Double.valueOf(2.25), 2L, "icon"
+        );
         Mockito.when(accountServiceAccess.getAccountDetails(Mockito.anyLong())).thenReturn(mockResponse);
 
         Response response = given().when().get("/account/1");
@@ -103,7 +124,10 @@ public class AccountResourceTest {
 
     @Test
     void testGetAccountPerUser() {
-        AccountResponse mockResponse = new AccountResponse(1L, 1L, Double.valueOf(0));
+        AccountResponse mockResponse = new AccountResponse(
+                1L, "name", "PT50123",
+                Double.valueOf(2.25), 2L, "icon"
+        );
 
         Mockito.when(accountServiceAccess.getAccountPerUser(Mockito.anyLong())).thenReturn(List.of(mockResponse));
 
@@ -129,7 +153,10 @@ public class AccountResourceTest {
 
     @Test
     void testGetAllCustomers() {
-        AccountResponse mockResponse = new AccountResponse(1L, 1L, Double.valueOf(0));
+        AccountResponse mockResponse = new AccountResponse(
+                1L, "name", "PT50123",
+                Double.valueOf(2.25), 2L, "icon"
+        );
 
         Mockito.when(accountServiceAccess.getAllAccounts()).thenReturn(List.of(mockResponse));
 
@@ -148,10 +175,16 @@ public class AccountResourceTest {
     @Test
     void testUpdateAccountDetails() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
-        AccountResponse mockResponse = new AccountResponse(1L, 1L, Double.valueOf(0));
+        AccountResponse mockResponse = new AccountResponse(
+                1L, "name", "PT50123",
+                Double.valueOf(2.25), 2L, "icon"
+        );
 
         Mockito.when(accountServiceAccess.updateAccountDetails(Mockito.anyLong(), Mockito.any(AccountRequest.class))).thenReturn(mockResponse);
 
@@ -162,8 +195,11 @@ public class AccountResourceTest {
     @Test
     void testUpdateAccountDetails_notFound() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
         Mockito.when(accountServiceAccess.updateAccountDetails(Mockito.anyLong(), Mockito.any(AccountRequest.class))).thenThrow(NotFoundException.class);
 
@@ -174,8 +210,11 @@ public class AccountResourceTest {
     @Test
     void testUpdateAccountDetails_unhandledException() {
         AccountRequest accountRequest = new AccountRequest();
-        accountRequest.setCustomerId(1L);
-        accountRequest.setBalance(Double.valueOf(0));
+        accountRequest.setBankName("new");
+        accountRequest.setIban("DE5012");
+        accountRequest.setBalance(Double.valueOf(22.25));
+        accountRequest.setCustomerId(22L);
+        accountRequest.setIconPath("logo");
 
         Mockito.when(accountServiceAccess.updateAccountDetails(Mockito.anyLong(), Mockito.any(AccountRequest.class))).thenThrow(BadRequestException.class);
 

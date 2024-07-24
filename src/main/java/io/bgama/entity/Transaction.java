@@ -16,11 +16,22 @@ public class Transaction {
     @GeneratedValue
     private Long id;
 
+    private String destination;
+
     private Long accountId;
+
+    private Long transaction_type;
+
+    private Long transaction_category;
+
+    private Boolean state;
 
     private Boolean isDebit;
 
     private Double amount;
+
+    private Boolean repetition;
+
 
     /**
      * Retrieves the ID of the transaction.
@@ -38,6 +49,14 @@ public class Transaction {
         this.id = id;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
     /**
      * Retrieves the ID of the account associated with the transaction.
      * @return The account ID associated with the transaction.
@@ -52,6 +71,30 @@ public class Transaction {
      */
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    public Long getTransactionType() {
+        return transaction_type;
+    }
+
+    public void setTransactionType(Long transaction_type) {
+        this.transaction_type = transaction_type;
+    }
+
+    public Long getTransactionCategory() {
+        return transaction_category;
+    }
+
+    public void setTransactionCategory(Long transaction_category) {
+        this.transaction_category = transaction_category;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
     }
 
     /**
@@ -84,5 +127,13 @@ public class Transaction {
      */
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Boolean getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(Boolean repetition) {
+        this.repetition = repetition;
     }
 }

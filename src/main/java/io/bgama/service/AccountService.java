@@ -49,21 +49,29 @@ public class AccountService implements AccountServiceAccess {
         checkCustomer(accountRequest);
 
         Account account = new Account();
-        account.setCustomerId(accountRequest.getCustomerId());
+        account.setBankName(accountRequest.getBankName());
+        account.setIban(accountRequest.getIban());
         account.setBalance(accountRequest.getBalance());
+        account.setCustomerId(accountRequest.getCustomerId());
+        account.setIconPath(accountRequest.getIconPath());
 
         accountDataLayer.persist(account);
 
         if(accountRequest.getBalance() != null && accountRequest.getBalance() > 0) {
             Transaction transaction = new Transaction();
+            transaction.setDestination("Starting Balance");
             transaction.setAccountId(account.getId());
+            transaction.setTransactionType(0L);
+            transaction.setTransactionCategory(0L);
+            transaction.setState(true);
             transaction.setDebit(false);
             transaction.setAmount(accountRequest.getBalance());
+            transaction.setRepetition(false);
 
             transactionDataLayer.persist(transaction);
         }
 
-        return new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance());
+        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath());
     }
 
     /**
@@ -75,7 +83,7 @@ public class AccountService implements AccountServiceAccess {
     @Override
     public AccountResponse getAccountDetails(Long accountId) throws NotFoundException {
         Account account = checkAccount(accountId);
-        return new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance());
+        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath());
     }
 
     /**
@@ -86,7 +94,7 @@ public class AccountService implements AccountServiceAccess {
     public List<AccountResponse> getAllAccounts() {
         List<Account> accountList = accountDataLayer.findAll(Sort.ascending("id")).list();
         return accountList.stream()
-                .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
+                .map(account -> new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath()))
                 .collect(Collectors.toList());
     }
 
@@ -98,7 +106,7 @@ public class AccountService implements AccountServiceAccess {
     public List<AccountResponse> getAccountPerUser(Long userId) {
         List<Account> accountList = accountDataLayer.find("customerId", Sort.ascending("id"), userId).list();
         return accountList.stream()
-                .map(account -> new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance()))
+                .map(account -> new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath()))
                 .collect(Collectors.toList());
     }
 
@@ -115,17 +123,15 @@ public class AccountService implements AccountServiceAccess {
         Account account = checkAccount(accountId);
         checkCustomer(accountRequest);
 
-        if (accountRequest.getCustomerId() != null) {
-            account.setCustomerId(accountRequest.getCustomerId());
-        }
-
-        if (accountRequest.getBalance() != null) {
-            account.setBalance(accountRequest.getBalance());
-        }
+        account.setBankName(accountRequest.getBankName());
+        account.setIban(accountRequest.getIban());
+        account.setBalance(accountRequest.getBalance());
+        account.setCustomerId(accountRequest.getCustomerId());
+        account.setIconPath(accountRequest.getIconPath());
 
         accountDataLayer.persist(account);
 
-        return new AccountResponse(account.getId(), account.getCustomerId(), account.getBalance());
+        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath());
     }
 
     /**

@@ -7,7 +7,6 @@ import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import io.bgama.entity.Account;
 import io.bgama.entity.Transaction;
-import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -42,9 +41,14 @@ public class TransactionService implements TransactionServiceAccess {
         Account account = checkAccount(transactionRequest);
 
         Transaction transaction = new Transaction();
+        transaction.setDestination(transactionRequest.getDestination());
         transaction.setAccountId(transactionRequest.getAccountId());
+        transaction.setTransactionType(transactionRequest.getTransactionType());
+        transaction.setTransactionCategory(transactionRequest.getTransactionCategory());
+        transaction.setState(transactionRequest.getState());
         transaction.setDebit(transactionRequest.getIsDebit());
         transaction.setAmount(transactionRequest.getAmount());
+        transaction.setRepetition(transactionRequest.getRepetition());
 
         transactionDataLayer.persist(transaction);
 
@@ -54,7 +58,7 @@ public class TransactionService implements TransactionServiceAccess {
             account.setBalance(account.getBalance() + transaction.getAmount());
         }
         accountDataLayer.persist(account);
-        return new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount());
+        return new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(), transaction.getTransactionType(), transaction.getTransactionCategory(), transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition());
     }
 
     /**
@@ -67,7 +71,7 @@ public class TransactionService implements TransactionServiceAccess {
     public TransactionResponse getTransactionDetails(Long transactionId) throws NotFoundException {
         Transaction transaction = checkTransaction(transactionId);
 
-        return new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount());
+        return new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(), transaction.getTransactionType(), transaction.getTransactionCategory(), transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition());
     }
 
     /**
@@ -78,7 +82,7 @@ public class TransactionService implements TransactionServiceAccess {
     public List<TransactionResponse> getAllTransactions() {
         List<Transaction> transactions = transactionDataLayer.findAll(Sort.ascending("id")).list();
         return transactions.stream()
-                .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount()))
+                .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(), transaction.getTransactionType(), transaction.getTransactionCategory(), transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition()))
                 .collect(Collectors.toList());
     }
 
@@ -90,7 +94,7 @@ public class TransactionService implements TransactionServiceAccess {
     public List<TransactionResponse> getTransactionPerAccount(Long accountId) {
         List<Transaction> transactionList = transactionDataLayer.find("accountId", Sort.ascending("id"), accountId).list();
         return transactionList.stream()
-                .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount()))
+                .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(), transaction.getTransactionType(), transaction.getTransactionCategory(), transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition()))
                 .collect(Collectors.toList());
     }
 
@@ -105,15 +109,19 @@ public class TransactionService implements TransactionServiceAccess {
     @Transactional
     public TransactionResponse updateTransactionDetails(Long transactionId, TransactionRequest transactionRequest) throws NotFoundException {
         Transaction transaction = checkTransaction(transactionId);
+        checkAccount(transactionRequest);
 
-        Account account = checkAccount(transactionRequest);
-
+        transaction.setDestination(transactionRequest.getDestination());
         transaction.setAccountId(transactionRequest.getAccountId());
+        transaction.setTransactionType(transactionRequest.getTransactionType());
+        transaction.setTransactionCategory(transactionRequest.getTransactionCategory());
+        transaction.setState(transactionRequest.getState());
         transaction.setDebit(transactionRequest.getIsDebit());
         transaction.setAmount(transactionRequest.getAmount());
+        transaction.setRepetition(transactionRequest.getRepetition());
 
         transactionDataLayer.persist(transaction);
-        return new TransactionResponse(transaction.getId(), transaction.getAccountId(), transaction.getDebit(), transaction.getAmount());
+        return new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(), transaction.getTransactionType(), transaction.getTransactionCategory(), transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition());
     }
 
     /**

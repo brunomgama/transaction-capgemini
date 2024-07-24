@@ -9,7 +9,6 @@ import io.bgama.entity.Account;
 import io.bgama.entity.Customer;
 import io.bgama.entity.Transaction;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;

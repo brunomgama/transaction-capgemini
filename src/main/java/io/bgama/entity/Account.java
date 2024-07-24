@@ -16,9 +16,15 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    private Long customerId;
+    private String bankName;
+
+    private String iban;
 
     private Double balance;
+
+    private Long customerId;
+
+    private String iconPath;
 
     /**
      * Retrieves the ID of the account.
@@ -34,6 +40,30 @@ public class Account {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * Retrieves the bank name of the account.
+     * @return The bank name of the account.
+     */
+    public String getBankName() {
+        return bankName;
+    }
+
+    /**
+     * Sets the bank name of the account.
+     * @param bankName The bank name to set.
+     */
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     /**
@@ -66,5 +96,13 @@ public class Account {
      */
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
     }
 }

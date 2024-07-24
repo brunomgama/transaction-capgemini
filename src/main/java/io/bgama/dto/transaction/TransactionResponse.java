@@ -6,22 +6,25 @@ package io.bgama.dto.transaction;
  */
 public class TransactionResponse {
     private Long id;
+    private String destination;
     private Long accountId;
+    private Long transaction_type;
+    private Long transaction_category;
+    private Boolean state;
     private Boolean isDebit;
     private Double amount;
+    private Boolean repetition;
 
-    /**
-     * Constructs a TransactionResponse object with the specified details.
-     * @param id        The unique identifier of the transaction.
-     * @param accountId The ID of the account associated with the transaction.
-     * @param isDebit   Whether the transaction is a debit or not.
-     * @param amount    The amount associated with the transaction.
-     */
-    public TransactionResponse(Long id, Long accountId, Boolean isDebit, Double amount) {
+    public TransactionResponse(Long id, String destination, Long accountId, Long transaction_type, Long transaction_category, Boolean state, Boolean isDebit, Double amount, Boolean repetition) {
         this.id = id;
+        this.destination = destination;
         this.accountId = accountId;
+        this.transaction_type = transaction_type;
+        this.transaction_category = transaction_category;
+        this.state = state;
         this.isDebit = isDebit;
         this.amount = amount;
+        this.repetition = repetition;
     }
 
     /**
@@ -40,6 +43,14 @@ public class TransactionResponse {
         this.id = id;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
     /**
      * Retrieves the ID of the account associated with the transaction.
      * @return The account ID.
@@ -54,6 +65,30 @@ public class TransactionResponse {
      */
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    public Long getTransactionType() {
+        return transaction_type;
+    }
+
+    public void setTransactionType(Long transaction_type) {
+        this.transaction_type = transaction_type;
+    }
+
+    public Long getTransactionCategory() {
+        return transaction_category;
+    }
+
+    public void setTransactionCategory(Long transaction_category) {
+        this.transaction_category = transaction_category;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
     }
 
     /**
@@ -86,5 +121,13 @@ public class TransactionResponse {
      */
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Boolean getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(Boolean repetition) {
+        this.repetition = repetition;
     }
 }

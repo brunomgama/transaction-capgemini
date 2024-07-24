@@ -27,11 +27,19 @@ public class TransactionResourceTest {
     @Test
     void testCreateTransaction() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
 
-        TransactionResponse mockResponse = new TransactionResponse(1L, 1L, Boolean.TRUE, Double.valueOf(1));
+        TransactionResponse mockResponse = new TransactionResponse(
+                1L, "loja", 2L, 0L, 0L,
+                true,true, Double.valueOf(2.25), false
+        );
 
         Mockito.when(transactionServiceAccess.createTransaction(Mockito.any(TransactionRequest.class))).thenReturn(mockResponse);
 
@@ -42,11 +50,19 @@ public class TransactionResourceTest {
     @Test
     void testCreateTransaction_persistenceException() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
 
-        TransactionResponse mockResponse = new TransactionResponse(1L, 1L, Boolean.TRUE, Double.valueOf(1));
+        TransactionResponse mockResponse = new TransactionResponse(
+                1L, "loja", 2L, 0L, 0L,
+                true,true, Double.valueOf(2.25), false
+        );
 
         Mockito.when(transactionServiceAccess.createTransaction(Mockito.any(TransactionRequest.class))).thenThrow(PersistenceException.class);
 
@@ -57,9 +73,14 @@ public class TransactionResourceTest {
     @Test
     void testCreateTransaction_notFoundException() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
 
         Mockito.when(transactionServiceAccess.createTransaction(Mockito.any(TransactionRequest.class))).thenThrow(NotFoundException.class);
 
@@ -70,10 +91,14 @@ public class TransactionResourceTest {
     @Test
     void testCreateTransaction_unhandledException() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
-
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
         Mockito.when(transactionServiceAccess.createTransaction(Mockito.any(TransactionRequest.class))).thenThrow(BadRequestException.class);
 
         Response response = given().body(transactionRequest).contentType(ContentType.JSON).when().post("/transaction");
@@ -82,7 +107,10 @@ public class TransactionResourceTest {
 
     @Test
     void testGetTransactionDetails() {
-        TransactionResponse mockResponse = new TransactionResponse(1L, 1L, Boolean.TRUE, Double.valueOf(1));
+        TransactionResponse mockResponse = new TransactionResponse(
+                1L, "loja", 2L, 0L, 0L,
+                true,true, Double.valueOf(2.25), false
+        );
         Mockito.when(transactionServiceAccess.getTransactionDetails(Mockito.anyLong())).thenReturn(mockResponse);
 
         Response response = given().when().get("/transaction/1");
@@ -107,7 +135,10 @@ public class TransactionResourceTest {
 
     @Test
     void testGetAllTransactions() {
-        TransactionResponse mockResponse = new TransactionResponse(1L, 1L, Boolean.TRUE, Double.valueOf(1));
+        TransactionResponse mockResponse = new TransactionResponse(
+                1L, "loja", 2L, 0L, 0L,
+                true,true, Double.valueOf(2.25), false
+        );
 
         Mockito.when(transactionServiceAccess.getAllTransactions()).thenReturn(List.of(mockResponse));
 
@@ -125,7 +156,10 @@ public class TransactionResourceTest {
 
     @Test
     void testGetTransactionPerAccount() {
-        TransactionResponse mockResponse = new TransactionResponse(1L, 1L, Boolean.TRUE, Double.valueOf(1));
+        TransactionResponse mockResponse = new TransactionResponse(
+                1L, "loja", 2L, 0L, 0L,
+                true,true, Double.valueOf(2.25), false
+        );
 
         Mockito.when(transactionServiceAccess.getTransactionPerAccount(1L)).thenReturn(List.of(mockResponse));
 
@@ -152,11 +186,19 @@ public class TransactionResourceTest {
     @Test
     void testUpdateAccountDetails() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
 
-        TransactionResponse mockResponse = new TransactionResponse(1L, 1L, Boolean.TRUE, Double.valueOf(1));
+        TransactionResponse mockResponse = new TransactionResponse(
+                1L, "loja", 2L, 0L, 0L,
+                true,true, Double.valueOf(2.25), false
+        );
 
         Mockito.when(transactionServiceAccess.updateTransactionDetails(Mockito.anyLong(), Mockito.any(TransactionRequest.class))).thenReturn(mockResponse);
 
@@ -167,9 +209,14 @@ public class TransactionResourceTest {
     @Test
     void testUpdateAccountDetails_notFound() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
 
         Mockito.when(transactionServiceAccess.updateTransactionDetails(Mockito.anyLong(), Mockito.any(TransactionRequest.class))).thenThrow(NotFoundException.class);
 
@@ -180,9 +227,14 @@ public class TransactionResourceTest {
     @Test
     void testUpdateAccountDetails_unhandledException() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccountId(1L);
-        transactionRequest.setAmount(Double.valueOf(1));
-        transactionRequest.setIsDebit(true);
+        transactionRequest.setDestination("ikea");
+        transactionRequest.setAccountId(22L);
+        transactionRequest.setTransactionType(1L);
+        transactionRequest.setTransactionCategory(1L);
+        transactionRequest.setState(false);
+        transactionRequest.setIsDebit(false);
+        transactionRequest.setAmount(Double.valueOf(22.25));
+        transactionRequest.setRepetition(false);
 
         Mockito.when(transactionServiceAccess.updateTransactionDetails(Mockito.anyLong(), Mockito.any(TransactionRequest.class))).thenThrow(BadRequestException.class);
 
