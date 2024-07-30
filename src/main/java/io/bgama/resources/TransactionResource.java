@@ -1,7 +1,6 @@
 package io.bgama.resources;
 
 import io.bgama.api.service.TransactionServiceAccess;
-import io.bgama.dto.account.AccountResponse;
 import io.bgama.dto.transaction.TransactionRequest;
 import io.bgama.dto.transaction.TransactionResponse;
 import io.bgama.error.ErrorMessage;

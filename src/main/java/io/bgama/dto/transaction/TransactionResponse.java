@@ -9,18 +9,22 @@ public class TransactionResponse {
     private String destination;
     private Long accountId;
     private Long transaction_type;
+    private String transaction_type_name;
     private Long transaction_category;
+    private String transaction_category_name;
     private Boolean state;
     private Boolean isDebit;
     private Double amount;
     private Boolean repetition;
 
-    public TransactionResponse(Long id, String destination, Long accountId, Long transaction_type, Long transaction_category, Boolean state, Boolean isDebit, Double amount, Boolean repetition) {
+    public TransactionResponse(Long id, String destination, Long accountId, Long transaction_type, String transaction_type_name, Long transaction_category,  String transaction_category_name, Boolean state, Boolean isDebit, Double amount, Boolean repetition) {
         this.id = id;
         this.destination = destination;
         this.accountId = accountId;
         this.transaction_type = transaction_type;
+        this.transaction_type_name = transaction_type_name;
         this.transaction_category = transaction_category;
+        this.transaction_category_name = transaction_category_name;
         this.state = state;
         this.isDebit = isDebit;
         this.amount = amount;
@@ -75,12 +79,28 @@ public class TransactionResponse {
         this.transaction_type = transaction_type;
     }
 
+    public String getTransactionTypeName() {
+        return transaction_type_name;
+    }
+
+    public void setTransactionTypeName(String transaction_type_name) {
+        this.transaction_type_name = transaction_type_name;
+    }
+
     public Long getTransactionCategory() {
         return transaction_category;
     }
 
     public void setTransactionCategory(Long transaction_category) {
         this.transaction_category = transaction_category;
+    }
+
+    public String getTransactionCategoryName() {
+        return transaction_category_name;
+    }
+
+    public void setTransactionCategoryName(String transaction_category_name) {
+        this.transaction_category_name = transaction_category_name;
     }
 
     public Boolean getState() {

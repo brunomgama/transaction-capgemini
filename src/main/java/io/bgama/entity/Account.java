@@ -24,6 +24,8 @@ public class Account {
 
     private Long customerId;
 
+    private String customerName;
+
     private String iconPath;
 
     /**
@@ -80,6 +82,14 @@ public class Account {
      */
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     /**

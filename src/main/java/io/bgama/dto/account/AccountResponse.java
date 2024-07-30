@@ -6,14 +6,16 @@ public class AccountResponse {
     private String iban;
     private Double balance;
     private Long customerId;
+    private String customerName;
     private String iconPath;
 
-    public AccountResponse(Long accountId, String bankName, String iban, Double balance, Long customerId, String iconPath ) {
+    public AccountResponse(Long accountId, String bankName, String iban, Double balance, Long customerId, String customerName, String iconPath) {
         this.accountId = accountId;
         this.bankName = bankName;
         this.iban = iban;
         this.balance = balance;
         this.customerId = customerId;
+        this.customerName = customerName;
         this.iconPath = iconPath;
     }
 
@@ -47,6 +49,14 @@ public class AccountResponse {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public Double getBalance() {

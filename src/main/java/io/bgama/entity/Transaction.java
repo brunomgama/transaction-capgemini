@@ -22,7 +22,11 @@ public class Transaction {
 
     private Long transaction_type;
 
+    private String transaction_type_name;
+
     private Long transaction_category;
+
+    private String transaction_category_name;
 
     private Boolean state;
 
@@ -81,12 +85,28 @@ public class Transaction {
         this.transaction_type = transaction_type;
     }
 
+    public String getTransactionTypeName() {
+        return transaction_type_name;
+    }
+
+    public void setTransactionTypeName(String transaction_type_name) {
+        this.transaction_type_name = transaction_type_name;
+    }
+
     public Long getTransactionCategory() {
         return transaction_category;
     }
 
     public void setTransactionCategory(Long transaction_category) {
         this.transaction_category = transaction_category;
+    }
+
+    public String getTransactionCategoryName() {
+        return transaction_category_name;
+    }
+
+    public void setTransactionCategoryName(String transaction_category_name) {
+        this.transaction_category_name = transaction_category_name;
     }
 
     public Boolean getState() {

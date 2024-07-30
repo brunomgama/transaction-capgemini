@@ -9,6 +9,8 @@ import io.bgama.dto.account.AccountResponse;
 import io.bgama.entity.Account;
 import io.bgama.entity.Customer;
 import io.bgama.entity.Transaction;
+import io.bgama.enums.Category;
+import io.bgama.enums.Types;
 import io.bgama.error.ErrorMessage;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -46,13 +48,14 @@ public class AccountService implements AccountServiceAccess {
     @Override
     @Transactional
     public AccountResponse createAccount(AccountRequest accountRequest) throws NotFoundException {
-        checkCustomer(accountRequest);
+        Customer customer = checkCustomer(accountRequest);
 
         Account account = new Account();
         account.setBankName(accountRequest.getBankName());
         account.setIban(accountRequest.getIban());
         account.setBalance(accountRequest.getBalance());
         account.setCustomerId(accountRequest.getCustomerId());
+        account.setCustomerName(customer.getName() + " " + customer.getSurname());
         account.setIconPath(accountRequest.getIconPath());
 
         accountDataLayer.persist(account);
@@ -62,7 +65,9 @@ public class AccountService implements AccountServiceAccess {
             transaction.setDestination("Starting Balance");
             transaction.setAccountId(account.getId());
             transaction.setTransactionType(0L);
+            transaction.setTransactionTypeName(Types.getLabelById(0L));
             transaction.setTransactionCategory(0L);
+            transaction.setTransactionCategoryName(Category.getLabelById(0L));
             transaction.setState(true);
             transaction.setDebit(false);
             transaction.setAmount(accountRequest.getBalance());
@@ -71,7 +76,7 @@ public class AccountService implements AccountServiceAccess {
             transactionDataLayer.persist(transaction);
         }
 
-        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath());
+        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getCustomerName(), account.getIconPath());
     }
 
     /**
@@ -83,7 +88,7 @@ public class AccountService implements AccountServiceAccess {
     @Override
     public AccountResponse getAccountDetails(Long accountId) throws NotFoundException {
         Account account = checkAccount(accountId);
-        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath());
+        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getCustomerName(), account.getIconPath());
     }
 
     /**
@@ -94,7 +99,7 @@ public class AccountService implements AccountServiceAccess {
     public List<AccountResponse> getAllAccounts() {
         List<Account> accountList = accountDataLayer.findAll(Sort.ascending("id")).list();
         return accountList.stream()
-                .map(account -> new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath()))
+                .map(account -> new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getCustomerName(), account.getIconPath()))
                 .collect(Collectors.toList());
     }
 
@@ -106,7 +111,7 @@ public class AccountService implements AccountServiceAccess {
     public List<AccountResponse> getAccountPerUser(Long userId) {
         List<Account> accountList = accountDataLayer.find("customerId", Sort.ascending("id"), userId).list();
         return accountList.stream()
-                .map(account -> new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath()))
+                .map(account -> new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getCustomerName(), account.getIconPath()))
                 .collect(Collectors.toList());
     }
 
@@ -121,17 +126,18 @@ public class AccountService implements AccountServiceAccess {
     @Transactional
     public AccountResponse updateAccountDetails(Long accountId, AccountRequest accountRequest) throws NotFoundException {
         Account account = checkAccount(accountId);
-        checkCustomer(accountRequest);
+        Customer customer = checkCustomer(accountRequest);
 
         account.setBankName(accountRequest.getBankName());
         account.setIban(accountRequest.getIban());
         account.setBalance(accountRequest.getBalance());
         account.setCustomerId(accountRequest.getCustomerId());
+        account.setCustomerName(customer.getName() + " " + customer.getSurname());
         account.setIconPath(accountRequest.getIconPath());
 
         accountDataLayer.persist(account);
 
-        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getIconPath());
+        return new AccountResponse(account.getId(), account.getBankName(), account.getIban(), account.getBalance(), account.getCustomerId(), account.getCustomerName(), account.getIconPath());
     }
 
     /**
@@ -165,10 +171,12 @@ public class AccountService implements AccountServiceAccess {
      * @param accountRequest     The request containing customer ID to check.
      * @throws NotFoundException If the customer with the specified ID is not found.
      */
-    private void checkCustomer(AccountRequest accountRequest) throws NotFoundException {
+    private Customer checkCustomer(AccountRequest accountRequest) throws NotFoundException {
         Customer customer = customerDataLayer.findById(accountRequest.getCustomerId());
         if (customer == null) {
             throw new NotFoundException(ErrorMessage.CUSTOMER_NOT_FOUND.getMessage());
         }
+
+        return customer;
     }
 }
