@@ -83,6 +83,21 @@ public class TransactionResource {
         }
     }
 
+    @GET
+    @Path("/future")
+    public Response getFutureTransactions() {
+        try {
+            List<TransactionResponse> transactions = transactionService.getFutureTransactions();
+            return Response.ok(transactions).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.TRANSACTION_NOT_FOUND.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(ErrorMessage.UNEXPECTED_ERROR.getMessage()).build();
+        }
+    }
+
     /**
      * Endpoint for retrieving transaction details by Account ID
      * @param accountId    The ID of the account to retrieve.

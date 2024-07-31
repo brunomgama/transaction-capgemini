@@ -102,6 +102,19 @@ public class TransactionService implements TransactionServiceAccess {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<TransactionResponse> getFutureTransactions() {
+        LocalDate today = LocalDate.now();
+        List<Transaction> transactions = transactionDataLayer.findAll(Sort.ascending("id")).list();
+        return transactions.stream()
+                .filter(transaction -> transaction.getTransactionDate().isAfter(today))
+                .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(),
+                        transaction.getTransactionType(), transaction.getTransactionTypeName(),  transaction.getTransactionCategory(), transaction.getTransactionCategoryName(),
+                        transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition(),
+                        transaction.getTransactionDate()))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Retrieves transactions from a specific account from the data layer and maps them to TransactionResponse objects.
      * @return a list of TransactionResponse objects containing account details.

@@ -36,6 +36,8 @@ public interface TransactionServiceAccess {
      */
     List<TransactionResponse> getAllTransactions();
 
+
+    List<TransactionResponse> getFutureTransactions();
     /**
      * Retrieves details of the transaction associated with the specified account ID.
      *
