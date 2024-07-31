@@ -18,6 +18,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +73,7 @@ public class AccountService implements AccountServiceAccess {
             transaction.setDebit(false);
             transaction.setAmount(accountRequest.getBalance());
             transaction.setRepetition(false);
+            transaction.setTransactionDate(LocalDate.now());
 
             transactionDataLayer.persist(transaction);
         }

@@ -1,5 +1,7 @@
 package io.bgama.dto.transaction;
 
+import java.time.LocalDate;
+
 /**
  * Data transfer object representing a response containing transaction details.
  * @author brunogama
@@ -16,8 +18,11 @@ public class TransactionResponse {
     private Boolean isDebit;
     private Double amount;
     private Boolean repetition;
+    private LocalDate transactionDate;
 
-    public TransactionResponse(Long id, String destination, Long accountId, Long transaction_type, String transaction_type_name, Long transaction_category,  String transaction_category_name, Boolean state, Boolean isDebit, Double amount, Boolean repetition) {
+    public TransactionResponse(Long id, String destination, Long accountId, Long transaction_type,
+                               String transaction_type_name, Long transaction_category,  String transaction_category_name,
+                               Boolean state, Boolean isDebit, Double amount, Boolean repetition, LocalDate transactionDate) {
         this.id = id;
         this.destination = destination;
         this.accountId = accountId;
@@ -29,6 +34,7 @@ public class TransactionResponse {
         this.isDebit = isDebit;
         this.amount = amount;
         this.repetition = repetition;
+        this.transactionDate = transactionDate;
     }
 
     /**
@@ -149,5 +155,13 @@ public class TransactionResponse {
 
     public void setRepetition(Boolean repetition) {
         this.repetition = repetition;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
     }
 }

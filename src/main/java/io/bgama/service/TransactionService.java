@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,12 +55,19 @@ public class TransactionService implements TransactionServiceAccess {
         transaction.setAmount(transactionRequest.getAmount());
         transaction.setRepetition(transactionRequest.getRepetition());
 
+        if(transactionRequest.getRepetition()) {
+            transaction.setTransactionDate(LocalDate.now());
+        } else {
+            transaction.setTransactionDate(transactionRequest.getTransactionDate());
+        }
+
         transactionDataLayer.persist(transaction);
 
         updateAccountAmount(account.getId());
         return new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(),
                 transaction.getTransactionType(), transaction.getTransactionTypeName(),  transaction.getTransactionCategory(), transaction.getTransactionCategoryName(),
-                transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition());
+                transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition(),
+                transaction.getTransactionDate());
     }
 
     /**
@@ -74,7 +82,9 @@ public class TransactionService implements TransactionServiceAccess {
 
         return new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(),
                 transaction.getTransactionType(), transaction.getTransactionTypeName(),  transaction.getTransactionCategory(), transaction.getTransactionCategoryName(),
-                transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition());
+                transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition(),
+                transaction.getTransactionDate());
+
     }
 
     /**
@@ -87,7 +97,8 @@ public class TransactionService implements TransactionServiceAccess {
         return transactions.stream()
                 .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(),
                         transaction.getTransactionType(), transaction.getTransactionTypeName(),  transaction.getTransactionCategory(), transaction.getTransactionCategoryName(),
-                        transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition()))
+                        transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition(),
+                        transaction.getTransactionDate()))
                 .collect(Collectors.toList());
     }
 
@@ -101,7 +112,8 @@ public class TransactionService implements TransactionServiceAccess {
         return transactionList.stream()
                 .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(),
                         transaction.getTransactionType(), transaction.getTransactionTypeName(),  transaction.getTransactionCategory(), transaction.getTransactionCategoryName(),
-                        transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition()))
+                        transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition(),
+                        transaction.getTransactionDate()))
                 .collect(Collectors.toList());
     }
 
@@ -128,13 +140,15 @@ public class TransactionService implements TransactionServiceAccess {
         transaction.setDebit(transactionRequest.getIsDebit());
         transaction.setAmount(transactionRequest.getAmount());
         transaction.setRepetition(transactionRequest.getRepetition());
+        transaction.setTransactionDate(transactionRequest.getTransactionDate());
 
         transactionDataLayer.persist(transaction);
         updateAccountAmount(account.getId());
 
         return new TransactionResponse(transaction.getId(), transaction.getDestination(), transaction.getAccountId(),
                 transaction.getTransactionType(), transaction.getTransactionTypeName(),  transaction.getTransactionCategory(), transaction.getTransactionCategoryName(),
-                transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition());
+                transaction.getState(), transaction.getDebit(), transaction.getAmount(), transaction.getRepetition(),
+                transaction.getTransactionDate());
     }
 
     /**
@@ -194,7 +208,7 @@ public class TransactionService implements TransactionServiceAccess {
             }
         }
 
-        account.setBalance(amount);
+        account.setBalance(Math.round(amount*100.0)/100.0);
         accountDataLayer.persist(account);
     }
 }

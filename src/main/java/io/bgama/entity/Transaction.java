@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
+
 /**
  * JPA entity representing a transaction.
  * To use it, get access to a JPA EntityManager via injection.
@@ -36,6 +38,7 @@ public class Transaction {
 
     private Boolean repetition;
 
+    private LocalDate transactionDate;
 
     /**
      * Retrieves the ID of the transaction.
@@ -155,5 +158,13 @@ public class Transaction {
 
     public void setRepetition(Boolean repetition) {
         this.repetition = repetition;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
     }
 }

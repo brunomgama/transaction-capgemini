@@ -25,7 +25,8 @@ public enum Category {
     SEGUROS(21L, "Seguros"),
     IMPOSTOS(22L, "Impostos"),
     ORDENADO(23L, "Ordenado"),
-    PRENDAS(24L, "Prendas");
+    PRENDAS(24L, "Prendas"),
+    TRANSFERENCIAS(25L, "Transferencias");
 
     private final long value;
     private final String label;

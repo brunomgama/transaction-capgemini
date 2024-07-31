@@ -1,5 +1,7 @@
 package io.bgama.dto.transaction;
 
+import java.time.LocalDate;
+
 /**
  * Data transfer object representing a request to create or update a transaction.
  * @author brunogama
@@ -15,6 +17,7 @@ public class TransactionRequest {
     private Boolean isDebit;
     private Double amount;
     private Boolean repetition;
+    private LocalDate transactionDate;
 
     public String getDestination() {
         return destination;
@@ -118,5 +121,13 @@ public class TransactionRequest {
 
     public void setRepetition(Boolean repetition) {
         this.repetition = repetition;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
     }
 }
